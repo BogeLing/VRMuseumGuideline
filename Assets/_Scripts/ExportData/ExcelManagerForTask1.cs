@@ -10,7 +10,6 @@ public class ExcelManagerForTask1 : MonoBehaviour
     private string filePath;
     private string timename;
     public GameObject head;
-    public GameObject cameraOffset;
     public GameObject table; // 新增：桌子的引用
     public InputAction markAction; // 用于即时记录的输入动作
     private int index = 2; // 从第二行开始记录数据，第一行用于标题
