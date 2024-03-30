@@ -1,0 +1,17 @@
+newmtl Solid
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  0.0 0.0 0.0
+d  1.0
+Ns  0.0
+illum 0
+
+newmtl 170511_mia337_005788_603_200Kfaces_OBJ4
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  0.0 0.0 0.0
+d  1.0
+Ns  0.0
+illum 0
+map_Kd 170511_mia337_005788_603_200Kfaces_OBJ4.jpg
+

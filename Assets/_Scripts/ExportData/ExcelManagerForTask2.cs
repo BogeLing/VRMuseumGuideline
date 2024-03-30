@@ -53,7 +53,7 @@ public class ExcelManagerForTask2 : MonoBehaviour
             string[] titles = { "Time", "HeadPosX", "HeadPosY", "HeadPosZ", "HeadRotX", "HeadRotY", "HeadRotZ",
                                 "LeftPosX", "LeftPosY", "LeftPosZ", "LeftRotX", "LeftRotY", "LeftRotZ",
                                 "RightPosX", "RightPosY", "RightPosZ", "RightRotX", "RightRotY", "RightRotZ",
-                                "Marked" };
+                                "Marked", "MarkPosX", "MarkPosY", "MarkPosZ", "MarkRotX", "MarkRotY", "MarkRotZ" };
             for (int i = 0; i < titles.Length; i++)
             {
                 worksheet.Cells[1, i + 1].Value = titles[i];
@@ -91,8 +91,12 @@ public class ExcelManagerForTask2 : MonoBehaviour
 
             if (recordMark)
             {
-                string markedObject = FindGrabbedObjectName();
-                worksheet.Cells[index, 20].Value = markedObject;
+                GameObject markedObj = FindGrabbedObject();
+                if (markedObj != null)
+                {
+                    worksheet.Cells[index, 20].Value = markedObj.name;
+                    RecordTransform(worksheet, index, 21, markedObj.transform);
+                }
             }
 
             index++;
@@ -100,7 +104,7 @@ public class ExcelManagerForTask2 : MonoBehaviour
         }
     }
 
-    private string FindGrabbedObjectName()
+    private GameObject FindGrabbedObject()
     {
         for (int a = 1; a <= 10; a++)
         {
@@ -110,13 +114,12 @@ public class ExcelManagerForTask2 : MonoBehaviour
                 GameObject obj = GameObject.Find(objectName);
                 if (obj != null && obj.GetComponent<XRGrabInteractable>()?.isSelected == true)
                 {
-                    return objectName;
+                    return obj;
                 }
             }
         }
-        return "";
+        return null;
     }
-
 
     private void RecordTransform(ExcelWorksheet worksheet, int rowIndex, int colIndex, Transform t)
     {

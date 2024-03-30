@@ -15,8 +15,8 @@ public class ObjectSwitcher : MonoBehaviour
         switchNextAction.Enable();
         switchPreviousAction.Enable();
 
-        switchNextAction.performed += _ => SwitchObject(1);
-        switchPreviousAction.performed += _ => SwitchObject(-1);
+        switchNextAction.performed += _ => SwitchParentObject(1);
+        switchPreviousAction.performed += _ => SwitchParentObject(-1);
     }
 
     private void OnDisable()
@@ -38,36 +38,54 @@ public class ObjectSwitcher : MonoBehaviour
                 {
                     Debug.Log(obj.name);
                     objects.Add(obj);
-                    obj.SetActive(false); // 默认设置为隐藏
+                    // 默认设置父物体为隐藏，确保父物体存在
+                    if (obj.transform.parent != null)
+                    {
+                        obj.transform.parent.gameObject.SetActive(false);
+                    }
                 }
             }
         }
 
-
-        // 激活列表中的第一个物体
+        // 激活列表中第一个物体的父物体
         if (objects.Count > 0)
         {
             currentIndex = 0;
-            objects[currentIndex].SetActive(true);
+            if (objects[currentIndex].transform.parent != null)
+            {
+                objects[currentIndex].transform.parent.gameObject.SetActive(true);
+            }
         }
     }
 
-    private void SwitchObject(int direction)
+    private void SwitchParentObject(int direction)
     {
         if (objects.Count == 0)
             return;
 
-        // 隐藏当前物体
-        objects[currentIndex].SetActive(false);
-
         // 计算新的索引值
-        currentIndex += direction;
-        if (currentIndex >= objects.Count)
-            currentIndex = 0;
-        else if (currentIndex < 0)
-            currentIndex = objects.Count - 1;
+        int newIndex = currentIndex + direction;
 
-        // 显示新的物体
-        objects[currentIndex].SetActive(true);
+        // 检查新索引是否超出范围，并阻止循环
+        if (newIndex >= objects.Count || newIndex < 0)
+        {
+            // 超出范围时不执行任何操作
+            return;
+        }
+
+        // 隐藏当前物体的父物体
+        if (objects[currentIndex].transform.parent != null)
+        {
+            objects[currentIndex].transform.parent.gameObject.SetActive(false);
+        }
+
+        // 更新索引
+        currentIndex = newIndex;
+
+        // 显示新的物体的父物体
+        if (objects[currentIndex].transform.parent != null)
+        {
+            objects[currentIndex].transform.parent.gameObject.SetActive(true);
+        }
     }
 }
